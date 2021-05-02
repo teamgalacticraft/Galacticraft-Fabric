@@ -20,36 +20,38 @@
  * SOFTWARE.
  */
 
-package dev.galacticraft.mod.block.environment;
+package dev.galacticraft.mod.particle.fluid;
 
-import dev.galacticraft.mod.api.block.FluidBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.particle.ParticleTextureSheet;
+import net.minecraft.client.particle.SpriteBillboardParticle;
+import net.minecraft.client.world.ClientWorld;
 
 /**
  * @author <a href="https://github.com/TeamGalacticraft">TeamGalacticraft</a>
  */
-public class CrudeOilBlock extends FluidBlock {
-    public CrudeOilBlock(FlowableFluid fluid, Settings settings) {
-        super(fluid, settings);
+@Environment(EnvType.CLIENT)
+public class DrippingSulphuricAcidParticle extends SpriteBillboardParticle {
+
+    public DrippingSulphuricAcidParticle(ClientWorld world, double x, double y, double z, double velX, double velY, double velZ) {
+        super(world, x, y, z, velX, velY, velZ);
+        setSprite(MinecraftClient.getInstance().getItemRenderer().getModels().getSprite(Blocks.ACACIA_LOG.asItem()));
+        this.scale *= 0.25f;
+        this.velocityX = 0.0f;
+        this.velocityY = -0.6f;
+        this.velocityZ = 0.0f;
+        this.colorRed = 42f / 255f;
+        this.colorGreen = 42f / 255f;
+        this.colorBlue = 42f / 255f;
+        this.colorAlpha = 229f / 255f;
+        this.maxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
     }
 
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos blockPos, Entity entity) {
-        if (entity instanceof LivingEntity && this.getFluidState(blockState).getFluid().isStill(this.getFluidState(blockState))) {
-            if (entity instanceof PlayerEntity) {
-                if (((PlayerEntity) entity).isCreative()) {
-                    return;
-                }
-            }
-            ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 6 * 20));
-        }
+    public ParticleTextureSheet getType() {
+        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
     }
 }

@@ -78,13 +78,17 @@ public class GalacticraftBlock {
     public static final Block UNLIT_LANTERN = registerBlockWithoutItem(new UnlitLanternBlock(FabricBlockSettings.copy(Blocks.LANTERN).luminance(state -> 0)), Constant.Block.UNLIT_LANTERN);
 
     // LIQUIDS
-    public static final dev.galacticraft.mod.api.block.FluidBlock CRUDE_OIL = registerBlockWithoutItem(new CrudeOilBlock(GalacticraftFluid.CRUDE_OIL, FabricBlockSettings.of(new FabricMaterialBuilder(MaterialColor.BLACK)
+    public static final FluidBlock CRUDE_OIL = registerBlockWithoutItem(new CrudeOilBlock(GalacticraftFluid.CRUDE_OIL, FabricBlockSettings.of(new FabricMaterialBuilder(MaterialColor.BLACK)
             .allowsMovement().destroyedByPiston().burnable().lightPassesThrough().notSolid().replaceable().liquid().build())
             .strength(100.0F, 1000.0F).dropsNothing()), Constant.Block.CRUDE_OIL);
 
-    public static final dev.galacticraft.mod.api.block.FluidBlock FUEL = registerBlockWithoutItem(new FluidBlock(GalacticraftFluid.FUEL, FabricBlockSettings.of(new FabricMaterialBuilder(MaterialColor.YELLOW)
+    public static final FluidBlock FUEL = registerBlockWithoutItem(new FluidBlock(GalacticraftFluid.FUEL, FabricBlockSettings.of(new FabricMaterialBuilder(MaterialColor.YELLOW)
             .allowsMovement().destroyedByPiston().burnable().lightPassesThrough().notSolid().replaceable().liquid().build())
             .strength(50.0F, 50.0F).dropsNothing()), Constant.Block.FUEL);
+
+    public static final FluidBlock SULPHURIC_ACID = registerBlockWithoutItem(new FluidBlock(GalacticraftFluid.SULPHURIC_ACID, FabricBlockSettings.of(new FabricMaterialBuilder(MaterialColor.GREEN)
+            .allowsMovement().destroyedByPiston().lightPassesThrough().notSolid().replaceable().liquid().build())
+            .strength(50.0F, 50.0F).dropsNothing()), Constant.Block.SULPHURIC_ACID);
 
     // DECORATION BLOCKS
     public static final Block[] ALUMINUM_DECORATIONS = createDecorationBlocks(Constant.Block.ALUMINUM_DECORATION, FabricBlockSettings.of(Material.STONE, MaterialColor.STONE).strength(2.0F, 2.0F), true);

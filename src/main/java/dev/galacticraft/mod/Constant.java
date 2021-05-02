@@ -209,6 +209,7 @@ public interface Constant {
         String CRACKED_MOON_BASALT_BRICK = "cracked_moon_basalt_brick";
         String LUNAR_CARTOGRAPHY_TABLE = "lunar_cartography_table";
         String OXYGEN_STORAGE_MODULE = "oxygen_storage_module";
+        String SULPHURIC_ACID = "sulphuric_acid";
     }
 
     interface Fluid {
@@ -218,8 +219,8 @@ public interface Constant {
         String FUEL_STILL = "fuel_still";
         String BACTERIAL_ACID_FLOWING = "bacterial_acid_flowing";
         String BACTERIAL_ACID_STILL = "bacterial_acid_still";
-        String SULFURIC_ACID_FLOWING = "sulfuric_acid_flowing";
-        String SULFURIC_ACID_STILL = "sulfuric_acid_still";
+        String SULPHURIC_ACID_FLOWING = "sulphuric_acid_flowing";
+        String SULPHURIC_ACID_STILL = "sulphuric_acid_still";
         String OXYGEN_GAS = "oxygen_gas";
         String LIQUID_OXYGEN = "liquid_oxygen";
 
@@ -335,6 +336,7 @@ public interface Constant {
         //Fluid buckets
         String CRUDE_OIL_BUCKET = "crude_oil_bucket";
         String FUEL_BUCKET = "fuel_bucket";
+        String SULPHURIC_ACID_BUCKET = "sulphuric_acid_bucket";
 
         //GC INVENTORY
         String PARACHUTE = "parachute";
@@ -399,6 +401,7 @@ public interface Constant {
     interface Particle {
         String DRIPPING_FUEL_PARTICLE = "dripping_fuel_particle";
         String DRIPPING_CRUDE_OIL_PARTICLE = "dripping_crude_oil_particle";
+        String DRIPPING_SULPHURIC_ACID_PARTICLE = "dripping_sulphuric_acid_particle";
     }
 
     interface Config {

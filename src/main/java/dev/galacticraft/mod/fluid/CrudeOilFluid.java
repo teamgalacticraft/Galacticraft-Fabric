@@ -126,7 +126,7 @@ public class CrudeOilFluid extends FlowableFluid {
 
     @Override
     public float getBlastResistance() {
-        return 100.f;
+        return -5.0f;
     }
 
     @Override
@@ -145,7 +145,6 @@ public class CrudeOilFluid extends FlowableFluid {
     }
 
     public static class Flowing extends CrudeOilFluid {
-
         public Flowing() {
         }
 
@@ -167,7 +166,6 @@ public class CrudeOilFluid extends FlowableFluid {
     }
 
     public static class Still extends CrudeOilFluid {
-
         public Still() {
         }
 

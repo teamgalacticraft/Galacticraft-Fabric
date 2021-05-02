@@ -37,9 +37,10 @@ public class GalacticraftFluid {
     public static final FlowableFluid FLOWING_CRUDE_OIL = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.CRUDE_OIL_FLOWING), new CrudeOilFluid.Flowing());
     public static final FlowableFluid FUEL = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.FUEL_STILL), new FuelFluid.Still());
     public static final FlowableFluid FLOWING_FUEL = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.FUEL_FLOWING), new FuelFluid.Flowing());
+    public static final FlowableFluid SULPHURIC_ACID = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.SULPHURIC_ACID_STILL), new SulphuricAcid.Still());
+    public static final FlowableFluid FLOWING_SULPHURIC_ACID = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.SULPHURIC_ACID_FLOWING), new SulphuricAcid.Flowing());
     public static final Fluid LIQUID_OXYGEN = Registry.register(Registry.FLUID, new Identifier(Constant.MOD_ID, Constant.Fluid.LIQUID_OXYGEN), new OxygenFluid());
 
     public static void register() {
-
     }
 }

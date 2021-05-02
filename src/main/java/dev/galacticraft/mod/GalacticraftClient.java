@@ -38,6 +38,7 @@ import dev.galacticraft.mod.mixin.SkyPropertiesAccessor;
 import dev.galacticraft.mod.particle.GalacticraftParticle;
 import dev.galacticraft.mod.particle.fluid.DrippingCrudeOilParticle;
 import dev.galacticraft.mod.particle.fluid.DrippingFuelParticle;
+import dev.galacticraft.mod.particle.fluid.DrippingSulphuricAcidParticle;
 import dev.galacticraft.mod.screen.GalacticraftScreenHandlerType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -92,6 +93,8 @@ public class GalacticraftClient implements ClientModInitializer {
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.CRUDE_OIL_FLOWING));
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.FUEL_STILL));
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.FUEL_FLOWING));
+            registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.SULPHURIC_ACID_STILL));
+            registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.SULPHURIC_ACID_FLOWING));
         });
 
         ScreenRegistry.register(GalacticraftScreenHandlerType.BASIC_SOLAR_PANEL_HANDLER, BasicSolarPanelScreen::new);
@@ -143,6 +146,7 @@ public class GalacticraftClient implements ClientModInitializer {
 
         ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_FUEL_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingFuelParticle(world, x, y, z, velX, velY, velZ));
         ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_CRUDE_OIL_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingCrudeOilParticle(world, x, y, z, velX, velY, velZ));
+        ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_SULPHURIC_ACID_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingSulphuricAcidParticle(world, x, y, z, velX, velY, velZ));
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(resourceManager -> (resourceId, context) -> {
             if (MachineBakedModel.MACHINE_MARKER.equals(resourceId)) {

@@ -36,6 +36,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -49,15 +51,15 @@ import java.util.Random;
 /**
  * @author <a href="https://github.com/TeamGalacticraft">TeamGalacticraft</a>
  */
-public class FuelFluid extends FlowableFluid {
+public class SulphuricAcid extends FlowableFluid {
     @Override
     public Fluid getFlowing() {
-        return GalacticraftFluid.FLOWING_FUEL;
+        return GalacticraftFluid.FLOWING_SULPHURIC_ACID;
     }
 
     @Override
     public Fluid getStill() {
-        return GalacticraftFluid.FUEL;
+        return GalacticraftFluid.SULPHURIC_ACID;
     }
 
     @Override
@@ -67,28 +69,35 @@ public class FuelFluid extends FlowableFluid {
 
     @Override
     public Item getBucketItem() {
-        return GalacticraftItems.FUEL_BUCKET;
+        return GalacticraftItems.SULPHURIC_ACID_BUCKET;
     }
 
     @Environment(EnvType.CLIENT)
     public ParticleEffect getParticle() {
-        return GalacticraftParticle.DRIPPING_FUEL_PARTICLE;
+        return GalacticraftParticle.DRIPPING_SULPHURIC_ACID_PARTICLE;
     }
 
     @Override
     public boolean canBeReplacedWith(FluidState fluidState, BlockView blockView, BlockPos blockPos, Fluid fluid, Direction direction) {
-        return direction == Direction.DOWN && !fluid.matchesType(GalacticraftFluid.FUEL);
+        return direction == Direction.DOWN && !fluid.matchesType(GalacticraftFluid.SULPHURIC_ACID);
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void randomDisplayTick(World world, BlockPos blockPos, FluidState fluidState, Random random) {
+    public void randomDisplayTick(World world, BlockPos pos, FluidState fluidState, Random random) {
         if (random.nextInt(10) == 0) {
-            world.addParticle(GalacticraftParticle.DRIPPING_FUEL_PARTICLE,
-                    (double) blockPos.getX() + 0.5D - random.nextGaussian() + random.nextGaussian(),
-                    (double) blockPos.getY() + 1.1F,
-                    (double) blockPos.getZ() + 0.5D - random.nextGaussian() + random.nextGaussian(),
+            world.addParticle(GalacticraftParticle.DRIPPING_SULPHURIC_ACID_PARTICLE,
+                    (double) pos.getX() + 0.5D - random.nextGaussian() + random.nextGaussian(),
+                    (double) pos.getY() + 1.1F,
+                    (double) pos.getZ() + 0.5D - random.nextGaussian() + random.nextGaussian(),
                     0.0D, 0.0D, 0.0D);
+        }
+
+        BlockPos blockPos = pos.up();
+        if (world.getBlockState(blockPos).isAir() && !world.getBlockState(blockPos).isOpaqueFullCube(world, blockPos)) {
+            if (random.nextInt(1000) == 0) {
+                world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
+            }
         }
     }
 
@@ -125,12 +134,12 @@ public class FuelFluid extends FlowableFluid {
 
     @Override
     public float getBlastResistance() {
-        return -10.0f;
+        return 100.f;
     }
 
     @Override
     public BlockState toBlockState(FluidState fluidState) {
-        return GalacticraftBlock.FUEL.getDefaultState().with(FluidBlock.LEVEL, method_15741(fluidState));
+        return GalacticraftBlock.SULPHURIC_ACID.getDefaultState().with(FluidBlock.LEVEL, method_15741(fluidState));
     }
 
     @Override
@@ -143,9 +152,8 @@ public class FuelFluid extends FlowableFluid {
         return 0;
     }
 
-    public static class Flowing extends FuelFluid {
+    public static class Flowing extends SulphuricAcid {
         public Flowing() {
-
         }
 
         @Override
@@ -165,7 +173,7 @@ public class FuelFluid extends FlowableFluid {
         }
     }
 
-    public static class Still extends FuelFluid {
+    public static class Still extends SulphuricAcid {
         public Still() {
         }
 
