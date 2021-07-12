@@ -41,7 +41,7 @@ import net.minecraft.util.Identifier;
  */
 @Environment(EnvType.CLIENT)
 public class EvolvedSpiderEyesFeatureRenderer<T extends EvolvedSpiderEntity, M extends EvolvedSpiderModel<T>> extends FeatureRenderer<T, M> {
-    private static final RenderLayer LAYER = RenderLayer.getEyes(new Identifier(Constant.MOD_ID, "textures/entity/evolved/spider_eyes.png"));
+    private static final RenderLayer LAYER = RenderLayer.getEyes(new Identifier(Constant.MOD_ID, Constant.FeatureRendererTexture.EVOLVED_SPIDER_EYES));
 
     public EvolvedSpiderEyesFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext) {
         super(featureRendererContext);

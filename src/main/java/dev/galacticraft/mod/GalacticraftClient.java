@@ -30,6 +30,7 @@ import dev.galacticraft.mod.client.network.GalacticraftClientPacketReceiver;
 import dev.galacticraft.mod.client.render.MoonSkyProperties;
 import dev.galacticraft.mod.client.render.block.entity.GalacticraftBlockEntityRenderer;
 import dev.galacticraft.mod.client.render.entity.*;
+import dev.galacticraft.mod.client.render.entity.feature.gear.player.*;
 import dev.galacticraft.mod.client.resource.GalacticraftResourceReloadListener;
 import dev.galacticraft.mod.entity.GalacticraftEntityType;
 import dev.galacticraft.mod.misc.cape.CapesLoader;
@@ -45,10 +46,12 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
@@ -66,6 +69,27 @@ public class GalacticraftClient implements ClientModInitializer {
         long startInitTime = System.currentTimeMillis();
         Galacticraft.LOGGER.info("Starting client initialization.");
         CapesLoader.load();
+
+        // Render gear on player
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper) -> {
+            if (entityRenderer instanceof PlayerEntityRenderer) {
+                registrationHelper.register(new PlayerOxygenMaskFeatureRenderer<>((PlayerEntityRenderer) entityRenderer, 1.0F,
+                        (stack, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> stack.scale(0.825F, 0.825F, 0.825F)
+                ));
+                registrationHelper.register(new PlayerLeftOxygenTankFeatureRenderer<>((PlayerEntityRenderer) entityRenderer, 0.0F,
+                        (stack, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> {}
+                ));
+                registrationHelper.register(new PlayerRightOxygenTankFeatureRenderer<>((PlayerEntityRenderer) entityRenderer, 0.0F,
+                        (stack, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> {}
+                ));
+                registrationHelper.register(new PlayerSensorGlassesFeatureRenderer<>((PlayerEntityRenderer) entityRenderer, 1.0F,
+                        (stack, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> stack.scale(0.75F, 0.75F, 0.75F)
+                ));
+                registrationHelper.register(new PlayerFrequencyModuleFeatureRenderer<>((PlayerEntityRenderer) entityRenderer, 1.0F,
+                        (stack, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> stack.scale(0.6F, 0.6F, 0.6F)
+                ));
+            }
+        });
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((spriteAtlasTexture, registry) -> {
             for (int i = 0; i <= 8; i++) {
@@ -155,6 +179,6 @@ public class GalacticraftClient implements ClientModInitializer {
 
         SkyPropertiesAccessor.getBY_IDENTIFIER().put(new Identifier(Constant.MOD_ID, "moon"), new MoonSkyProperties());
 
-        Galacticraft.LOGGER.info("Client initialization complete. (Took {}ms.)", System.currentTimeMillis() - startInitTime);
+        Galacticraft.LOGGER.info(String.format("Client initialization complete. (Took %d ms.)", System.currentTimeMillis() - startInitTime));
     }
 }
