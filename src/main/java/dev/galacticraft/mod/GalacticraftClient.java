@@ -23,6 +23,7 @@
 package dev.galacticraft.mod;
 
 import dev.galacticraft.mod.block.GalacticraftBlock;
+import dev.galacticraft.mod.block.environment.FallenMeteorBlock;
 import dev.galacticraft.mod.client.gui.screen.ingame.*;
 import dev.galacticraft.mod.client.model.MachineBakedModel;
 import dev.galacticraft.mod.client.model.MachineUnbakedModel;
@@ -32,9 +33,11 @@ import dev.galacticraft.mod.client.render.block.entity.GalacticraftBlockEntityRe
 import dev.galacticraft.mod.client.render.entity.*;
 import dev.galacticraft.mod.client.resource.GalacticraftResourceReloadListener;
 import dev.galacticraft.mod.entity.GalacticraftEntityType;
+import dev.galacticraft.mod.item.GalacticraftItems;
 import dev.galacticraft.mod.misc.cape.CapesLoader;
 import dev.galacticraft.mod.mixin.SkyPropertiesAccessor;
 import dev.galacticraft.mod.particle.GalacticraftParticle;
+import dev.galacticraft.mod.particle.fluid.DrippingBacterialSludgeParticle;
 import dev.galacticraft.mod.particle.fluid.DrippingCrudeOilParticle;
 import dev.galacticraft.mod.particle.fluid.DrippingFuelParticle;
 import dev.galacticraft.mod.screen.GalacticraftScreenHandlerType;
@@ -45,6 +48,8 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderingRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -87,6 +92,8 @@ public class GalacticraftClient implements ClientModInitializer {
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.CRUDE_OIL_FLOWING));
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.FUEL_STILL));
             registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.FUEL_FLOWING));
+            registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.BACTERIAL_SLUDGE_STILL));
+            registry.register(Constant.Fluid.getIdentifier(Constant.Fluid.BACTERIAL_SLUDGE_FLOWING));
         });
 
         ScreenRegistry.register(GalacticraftScreenHandlerType.BASIC_SOLAR_PANEL_HANDLER, BasicSolarPanelScreen::new);
@@ -133,11 +140,14 @@ public class GalacticraftClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(GalacticraftBlock.UNLIT_WALL_TORCH, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(GalacticraftBlock.GLOWSTONE_LANTERN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(GalacticraftBlock.UNLIT_LANTERN, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(GalacticraftBlock.CAVERNOUS_VINE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(GalacticraftBlock.POISONOUS_CAVERNOUS_VINE, RenderLayer.getCutout());
 
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new GalacticraftResourceReloadListener());
 
         ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_FUEL_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingFuelParticle(world, x, y, z, velX, velY, velZ));
         ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_CRUDE_OIL_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingCrudeOilParticle(world, x, y, z, velX, velY, velZ));
+        ParticleFactoryRegistry.getInstance().register(GalacticraftParticle.DRIPPING_BACTERIAL_SLUDGE_PARTICLE, (type, world, x, y, z, velX, velY, velZ) -> new DrippingBacterialSludgeParticle(world, x, y, z, velX, velY, velZ));
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(resourceManager -> (resourceId, context) -> {
             if (MachineBakedModel.MACHINE_MARKER.equals(resourceId)) {
@@ -154,6 +164,13 @@ public class GalacticraftClient implements ClientModInitializer {
         });
 
         SkyPropertiesAccessor.getBY_IDENTIFIER().put(new Identifier(Constant.MOD_ID, "moon"), new MoonSkyProperties());
+
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> FallenMeteorBlock.colorMultiplier(world, pos), GalacticraftBlock.FALLEN_METEOR);
+
+        ArmorRenderingRegistry.registerSimpleTexture(new Identifier(Constant.MOD_ID, "desh"), GalacticraftItems.DESH_HELMET, GalacticraftItems.DESH_CHESTPLATE, GalacticraftItems.DESH_LEGGINGS, GalacticraftItems.DESH_BOOTS);
+        ArmorRenderingRegistry.registerSimpleTexture(new Identifier(Constant.MOD_ID, "heavy_duty"), GalacticraftItems.HEAVY_DUTY_HELMET, GalacticraftItems.HEAVY_DUTY_CHESTPLATE, GalacticraftItems.HEAVY_DUTY_LEGGINGS, GalacticraftItems.HEAVY_DUTY_BOOTS);
+        ArmorRenderingRegistry.registerSimpleTexture(new Identifier(Constant.MOD_ID, "titanium"), GalacticraftItems.TITANIUM_HELMET, GalacticraftItems.TITANIUM_CHESTPLATE, GalacticraftItems.TITANIUM_LEGGINGS, GalacticraftItems.TITANIUM_BOOTS);
+        ArmorRenderingRegistry.registerSimpleTexture(new Identifier(Constant.MOD_ID, "sensor_glasses"), GalacticraftItems.SENSOR_GLASSES);
 
         Galacticraft.LOGGER.info("Client initialization complete. (Took {}ms.)", System.currentTimeMillis() - startInitTime);
     }

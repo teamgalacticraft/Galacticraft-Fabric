@@ -24,24 +24,20 @@ package dev.galacticraft.mod.block.machine;
 
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.api.block.MachineBlock;
-import dev.galacticraft.mod.api.block.entity.MachineBlockEntity;
 import dev.galacticraft.mod.block.entity.CoalGeneratorBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -49,12 +45,14 @@ import java.util.Random;
 /**
  * @author <a href="https://github.com/TeamGalacticraft">TeamGalacticraft</a>
  */
-public class CoalGeneratorBlock extends SimpleMachineBlock<CoalGeneratorBlockEntity> {
-    private static final Text TOOLTIP_INFO = new TranslatableText("tooltip.galacticraft.coal_generator")
-            .setStyle(Constant.Text.DARK_GRAY_STYLE);
-
+public class CoalGeneratorBlock extends MachineBlock {
     public CoalGeneratorBlock(Settings settings) {
-        super(settings, CoalGeneratorBlockEntity::new, TOOLTIP_INFO);
+        super(settings,
+                (view) -> new CoalGeneratorBlockEntity(),
+                (itemStack, blockView, tooltipContext) ->
+                        new TranslatableText("tooltip.galacticraft.coal_generator")
+                                .setStyle(Constant.Text.DARK_GRAY_STYLE)
+        );
 
         this.setDefaultState(this.getDefaultState().with(Constant.Property.ACTIVE, false));
     }
@@ -86,15 +84,5 @@ public class CoalGeneratorBlock extends SimpleMachineBlock<CoalGeneratorBlockEnt
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(Constant.Property.ACTIVE);
-    }
-
-    @Override
-    public CoalGeneratorBlockEntity createBlockEntity(BlockView view) {
-        return new CoalGeneratorBlockEntity();
-    }
-
-    @Override
-    public Text machineInfo(ItemStack stack, BlockView view, boolean advanced) {
-        return TOOLTIP_INFO;
     }
 }

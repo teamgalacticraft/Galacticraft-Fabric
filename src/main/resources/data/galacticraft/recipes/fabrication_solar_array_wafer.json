@@ -3,8 +3,6 @@
   "ingredient": {
     "item": "galacticraft:solar_dust"
   },
-  "result": {
-    "item": "galacticraft:solar_array_wafer",
-    "count": 3
-  }
+  "result": "galacticraft:solar_array_wafer",
+  "count": 3
 }

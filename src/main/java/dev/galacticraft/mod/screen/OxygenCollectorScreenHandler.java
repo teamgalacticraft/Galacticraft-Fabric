@@ -22,7 +22,6 @@
 
 package dev.galacticraft.mod.screen;
 
-import dev.galacticraft.mod.api.screen.MachineScreenHandler;
 import dev.galacticraft.mod.block.entity.OxygenCollectorBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

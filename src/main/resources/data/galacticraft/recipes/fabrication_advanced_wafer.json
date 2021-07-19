@@ -3,8 +3,6 @@
   "ingredient": {
     "item": "minecraft:repeater"
   },
-  "result": {
-    "item": "galacticraft:advanced_wafer",
-    "count": 1
-  }
+  "result": "galacticraft:advanced_wafer",
+  "count": 1
 }

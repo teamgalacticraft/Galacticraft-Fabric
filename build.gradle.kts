@@ -90,7 +90,7 @@ repositories {
             includeGroup("alexiil.mc.lib")
         }
     }
-    maven("https://maven.terraformersmc.com/") {
+    maven("https://maven.kotlindiscord.com/repository/terraformers/") {
         content {
             includeGroup("com.terraformersmc")
         }
@@ -154,6 +154,7 @@ dependencies {
         "fabric-renderer-indigo",
         "fabric-renderer-registries-v1",
         "fabric-rendering-fluids-v1",
+        "fabric-rendering-v1",
         "fabric-resource-loader-v0",
         "fabric-screen-handler-api-v1",
         "fabric-structure-api-v1",

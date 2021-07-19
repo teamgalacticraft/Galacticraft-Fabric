@@ -1,21 +1,16 @@
 ---
-name: Bug Report
-about: Report a bug with Galacticraft.
+name: Bug report
+about: What is the issue you are having?
 title: ''
-labels: 'type: bug'
+labels: ''
 assignees: ''
 
 ---
 
-## Game
-Galacticraft version: 
-<br/>Game Logs ([gist](https://gist.github.com)):
-<br/>Multiplayer? (Yes, No, LAN): 
+Galacticraft Rewoven version:
 
-## Expected Behaviour:
+Singleplayer, Multiplayer, or Singleplayer opened to LAN?
 
-## Actual Behaviour:
+Please list the Galacticraft Rewoven addons you have installed
 
-## Steps to Reproduce:
-
-## Screenshots:
+Please provide your LOG (preferably on [gist](https://gist.github.com) or [pastebin](https://pastebin.com)) and screenshots etc. if applicable

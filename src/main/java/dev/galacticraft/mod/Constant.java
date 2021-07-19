@@ -70,6 +70,7 @@ public interface Constant {
         String ASTEROID_ALUMINUM_ORE = "asteroid_aluminum_ore";
         String MOON_CHEESE_ORE = "moon_cheese_ore";
         String MOON_COPPER_ORE = "moon_copper_ore";
+        String MOON_BASALT_COPPER_ORE = "moon_basalt_copper_ore";
         String MARS_COPPER_ORE = "mars_copper_ore";
         String DESH_ORE = "desh_ore";
         String ILMENITE_ORE = "ilmenite_ore";
@@ -141,6 +142,7 @@ public interface Constant {
         // Liquids
         String FUEL = "fuel";
         String CRUDE_OIL = "crude_oil";
+        String BACTERIAL_SLUDGE = "bacterial_sludge";
 
         // Machines
         String CIRCUIT_FABRICATOR = "circuit_fabricator";
@@ -205,8 +207,8 @@ public interface Constant {
         String BEAM_RECEIVER = "beam_receiver";
         String SOLAR_ARRAY_MODULE = "solar_array_module";
         String OXYGEN_DISTRIBUTOR_BUBBLE_DUMMY_BLOCK = "oxygen_distributor_bubble_dummy_block";
-        String MOON_BASALT_BRICK = "moon_basalt_brick";
-        String CRACKED_MOON_BASALT_BRICK = "cracked_moon_basalt_brick";
+        String MOON_BASALT_BRICKS = "moon_basalt_bricks";
+        String CRACKED_MOON_BASALT_BRICKS = "cracked_moon_basalt_bricks";
         String LUNAR_CARTOGRAPHY_TABLE = "lunar_cartography_table";
         String OXYGEN_STORAGE_MODULE = "oxygen_storage_module";
     }
@@ -216,8 +218,8 @@ public interface Constant {
         String CRUDE_OIL_STILL = "crude_oil_still";
         String FUEL_FLOWING = "fuel_flowing";
         String FUEL_STILL = "fuel_still";
-        String BACTERIAL_ACID_FLOWING = "bacterial_acid_flowing";
-        String BACTERIAL_ACID_STILL = "bacterial_acid_still";
+        String BACTERIAL_SLUDGE_FLOWING = "bacterial_sludge_flowing";
+        String BACTERIAL_SLUDGE_STILL = "bacterial_sludge_still";
         String SULFURIC_ACID_FLOWING = "sulfuric_acid_flowing";
         String SULFURIC_ACID_STILL = "sulfuric_acid_still";
         String OXYGEN_GAS = "oxygen_gas";
@@ -235,7 +237,7 @@ public interface Constant {
         String RAW_METEORIC_IRON = "raw_meteoric_iron";
         String METEORIC_IRON_INGOT = "meteoric_iron_ingot";
         String LUNAR_SAPPHIRE = "lunar_sapphire";
-        String UNREFINED_DESH = "raw_desh";
+        String UNREFINED_DESH = "unrefined_desh";
         String DESH_INGOT = "desh_ingot";
         String DESH_STICK = "desh_stick";
         String CARBON_FRAGMENTS = "carbon_fragments";
@@ -270,9 +272,10 @@ public interface Constant {
         String COPPER_CANISTER = "copper_canister";
         String TIN_CANISTER = "tin_canister";
         String THERMAL_CLOTH = "thermal_cloth";
-        String ISOTHERMAL_FABRIC = "thermal_cloth_t2";
+        String ISOTHERMAL_FABRIC = "isothermal_fabric";
         String ORION_DRIVE = "orion_drive";
         String ATMOSPHERIC_VALVE = "atmospheric_valve";
+        String AMBIENT_THERMAL_CONTROLLER = "ambient_thermal_controller";
         String LIQUID_CANISTER = "liquid_canister";
         //FOOD
         String MOON_BERRIES = "moon_berries";
@@ -331,10 +334,12 @@ public interface Constant {
         String STANDARD_WRENCH = "standard_wrench";
         String BATTERY = "battery";
         String INFINITE_BATTERY = "infinite_battery";
+        String ATOMIC_BATTERY = "atomic_battery";
 
         //Fluid buckets
         String CRUDE_OIL_BUCKET = "crude_oil_bucket";
         String FUEL_BUCKET = "fuel_bucket";
+        String BACTERIAL_SLUDGE_BUCKET = "bacterial_sludge_bucket";
 
         //GC INVENTORY
         String PARACHUTE = "parachute";
@@ -399,6 +404,7 @@ public interface Constant {
     interface Particle {
         String DRIPPING_FUEL_PARTICLE = "dripping_fuel_particle";
         String DRIPPING_CRUDE_OIL_PARTICLE = "dripping_crude_oil_particle";
+        String DRIPPING_BACTERIAL_SLUDGE_PARTICLE = "dripping_bacterial_sludge_particle";
     }
 
     interface Config {
@@ -565,8 +571,8 @@ public interface Constant {
 
     interface ScreenHandler {
         String COAL_GENERATOR_SCREEN_HANDLER = "coal_generator_screen_handler";
-        String BASIC_SOLAR_PANEL_SCREEN_HANDLER = "basic_solar_panel_screen_handler";
-        String ADVANCED_SOLAR_PANEL_SCREEN_HANDLER = "advanced_solar_panel_screen_handler";
+        String BASIC_SOLAR_SCREEN_HANDLER = "basic_solar_panel_screen_handler";
+        String ADVANCED_SOLAR_SCREEN_HANDLER = "advanced_solar_panel_screen_handler";
         String CIRCUIT_FABRICATOR_SCREEN_HANDLER = "circuit_fabricator_screen_handler";
         String COMPRESSOR_SCREEN_HANDLER = "compressor_screen_handler";
         String ELECTRIC_COMPRESSOR_SCREEN_HANDLER = "electric_compressor_screen_handler";

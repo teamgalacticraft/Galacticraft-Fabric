@@ -75,11 +75,32 @@ import java.util.function.Supplier;
 /**
  * @author <a href="https://github.com/TeamGalacticraft">TeamGalacticraft</a>
  */
-public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWithEntity {
+public class MachineBlock extends BlockWithEntity {
     public static final BooleanProperty ARBITRARY_BOOLEAN_PROPERTY = BooleanProperty.of("update");
 
+    private final Function<BlockView, ? extends MachineBlockEntity> blockEntityFunc;
+    private final TriFunction<ItemStack, BlockView, Boolean, Text> machineInfo;
+
     protected MachineBlock(Settings settings) {
+        this(settings, (view) -> null, LiteralText.EMPTY);
+    }
+
+    public MachineBlock(Settings settings, Function<BlockView, ? extends MachineBlockEntity> blockEntityFunc, TriFunction<ItemStack, BlockView, Boolean, Text> machineInfo) {
         super(settings);
+        this.blockEntityFunc = blockEntityFunc;
+        this.machineInfo = machineInfo;
+    }
+
+    public MachineBlock(Settings settings, Function<BlockView, ? extends MachineBlockEntity> blockEntityFunc, Text machineInfo) {
+        this(settings, blockEntityFunc, (itemStack, blockView, tooltipContext) -> machineInfo);
+    }
+
+    public MachineBlock(Settings settings, Supplier<? extends MachineBlockEntity> blockEntitySupplier, TriFunction<ItemStack, BlockView, Boolean, Text> machineInfo) {
+        this(settings, (view) -> blockEntitySupplier.get(), machineInfo);
+    }
+
+    public MachineBlock(Settings settings, Supplier<? extends MachineBlockEntity> blockEntitySupplier, Text machineInfo) {
+        this(settings, blockEntitySupplier, (itemStack, blockView, tooltipContext) -> machineInfo);
     }
 
     @Override
@@ -89,7 +110,9 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWi
     }
 
     @Override
-    public abstract T createBlockEntity(BlockView view);
+    public MachineBlockEntity createBlockEntity(BlockView view) {
+        return blockEntityFunc.apply(view);
+    }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context) {
@@ -99,6 +122,9 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWi
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
+        if (this instanceof MultiBlockBase) {
+            ((MultiBlockBase) this).onMultiblockPlaced(world, pos, state);
+        }
         if (!world.isClient && placer instanceof PlayerEntity) {
             ((MachineBlockEntity) world.getBlockEntity(pos)).getSecurity().setOwner(((MinecraftServerTeamsGetter) world.getServer()).getSpaceRaceTeams(), ((PlayerEntity) placer));
         }
@@ -196,6 +222,12 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWi
                 }
             }
         }
+
+        if (this instanceof MultiBlockBase) {
+            for (BlockPos otherPart : ((MultiBlockBase) this).getOtherParts(state, pos)) {
+                world.setBlockState(otherPart, Blocks.AIR.getDefaultState(), 3);
+            }
+        }
     }
 
     @Override
@@ -203,6 +235,18 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWi
         BlockEntity entity = builder.get(LootContextParameters.BLOCK_ENTITY);
         if (entity.toTag(new CompoundTag()).getBoolean(Constant.Nbt.NO_DROP)) return Collections.emptyList();
         return super.getDroppedStacks(state, builder);
+    }
+
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        if (this instanceof MultiBlockBase) {
+            for (BlockPos otherPart : (((MultiBlockBase) this).getOtherParts(state, pos))) {
+                if (!world.getBlockState(otherPart).getMaterial().isReplaceable()) {
+                    return false;
+                }
+            }
+        }
+        return super.canPlaceAt(state, world, pos);
     }
 
     @Override
@@ -218,5 +262,7 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BlockWi
         return stack;
     }
 
-    public abstract Text machineInfo(ItemStack stack, BlockView view, boolean advanced);
+    public Text machineInfo(ItemStack stack, BlockView view, boolean context) {
+        return machineInfo.apply(stack, view, context);
+    }
 }

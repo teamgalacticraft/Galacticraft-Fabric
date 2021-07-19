@@ -100,6 +100,7 @@ public class GalacticraftItems {
     public static final Item ISOTHERMAL_FABRIC = registerItem(Constant.Item.ISOTHERMAL_FABRIC, new Item(new Item.Settings().group(ITEMS_GROUP)));
     public static final Item ORION_DRIVE = registerItem(Constant.Item.ORION_DRIVE, new Item(new Item.Settings().group(ITEMS_GROUP)));
     public static final Item ATMOSPHERIC_VALVE = registerItem(Constant.Item.ATMOSPHERIC_VALVE, new Item(new Item.Settings().group(ITEMS_GROUP)));
+    public static final Item AMBIENT_THERMAL_CONTROLLER = registerItem(Constant.Item.AMBIENT_THERMAL_CONTROLLER, new Item(new Item.Settings().group(ITEMS_GROUP)));
     //FOOD
     public static final Item MOON_BERRIES = registerItem(Constant.Item.MOON_BERRIES, new Item(new Item.Settings().food(GalacticraftFoodComponent.MOON_BERRIES).group(ITEMS_GROUP)));
     public static final Item CHEESE_CURD = registerItem(Constant.Item.CHEESE_CURD, new Item(new Item.Settings().food(GalacticraftFoodComponent.CHEESE_CURD).group(ITEMS_GROUP)));
@@ -168,9 +169,11 @@ public class GalacticraftItems {
     public static final Item STANDARD_WRENCH = registerItem(Constant.Item.STANDARD_WRENCH, new StandardWrenchItem(new Item.Settings().group(ITEMS_GROUP)));
     public static final Item BATTERY = registerItem(Constant.Item.BATTERY, new BatteryItem(new Item.Settings().group(ITEMS_GROUP)));
     public static final Item INFINITE_BATTERY = registerItem(Constant.Item.INFINITE_BATTERY, new InfiniteBatteryItem(new Item.Settings().group(ITEMS_GROUP).rarity(Rarity.EPIC)));
+    public static final Item ATOMIC_BATTERY = registerItem(Constant.Item.ATOMIC_BATTERY, new AtomicBatteryItem(new Item.Settings().group(ITEMS_GROUP).rarity(Rarity.RARE)));
     //Fluid buckets
     public static final BucketItem CRUDE_OIL_BUCKET = registerItem(Constant.Item.CRUDE_OIL_BUCKET, new BucketItem(GalacticraftFluid.CRUDE_OIL, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1).group(ITEMS_GROUP)));
     public static final BucketItem FUEL_BUCKET = registerItem(Constant.Item.FUEL_BUCKET, new BucketItem(GalacticraftFluid.FUEL, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1).group(ITEMS_GROUP)));
+    public static final BucketItem BACTERIAL_SLUDGE_BUCKET = registerItem(Constant.Item.BACTERIAL_SLUDGE_BUCKET, new BucketItem(GalacticraftFluid.BACTERIAL_SLUDGE, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1).group(ITEMS_GROUP)));
     //GC INVENTORY
     private static final Item.Settings PARACHUTE_SETTINGS = new Item.Settings().group(ITEMS_GROUP).maxCount(1);
     public static final Item PARACHUTE = registerItem(Constant.Item.PARACHUTE, new Item(PARACHUTE_SETTINGS));
