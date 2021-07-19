@@ -24,8 +24,10 @@ package dev.galacticraft.mod.block.entity;
 
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
-import com.hrznstudio.galacticraft.api.atmosphere.AtmosphericGas;
-import com.hrznstudio.galacticraft.api.celestialbodies.CelestialBodyType;
+import dev.galacticraft.api.registry.RegistryUtil;
+import dev.galacticraft.api.universe.celestialbody.CelestialBody;
+import dev.galacticraft.api.universe.celestialbody.CelestialBodyConfig;
+import dev.galacticraft.api.universe.celestialbody.landable.Landable;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.Galacticraft;
 import dev.galacticraft.mod.accessor.WorldOxygenAccessor;
@@ -47,7 +49,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -59,7 +60,7 @@ import java.util.*;
 /**
  * @author <a href="https://github.com/TeamGalacticraft">TeamGalacticraft</a>
  */
-public class OxygenSealerBlockEntity extends MachineBlockEntity implements Tickable {
+public class OxygenSealerBlockEntity extends MachineBlockEntity {
     public static final FluidAmount MAX_OXYGEN = FluidAmount.ofWhole(50);
     public static final int BATTERY_SLOT = 0;
     public static final int LOX_INPUT = 1;
@@ -67,10 +68,10 @@ public class OxygenSealerBlockEntity extends MachineBlockEntity implements Ticka
     private final Set<BlockPos> set = new HashSet<>();
     public static final byte SEAL_CHECK_TIME = 5 * 20;
     private byte sealCheckTime;
-    private CelestialBodyType type = null;
+    private boolean oxygenWorld = false;
 
-    public OxygenSealerBlockEntity() {
-        super(GalacticraftBlockEntityType.OXYGEN_SEALER);
+    public OxygenSealerBlockEntity(BlockPos pos, BlockState state) {
+        super(GalacticraftBlockEntityType.OXYGEN_SEALER, pos, state);
     }
 
     @Override
@@ -87,15 +88,16 @@ public class OxygenSealerBlockEntity extends MachineBlockEntity implements Ticka
     }
 
     @Override
-    public FluidAmount getFluidTankCapacity() {
+    public FluidAmount fluidInvCapacity() {
         return MAX_OXYGEN;
     }
 
     @Override
-    public void setLocation(World world, BlockPos pos) {
-        super.setLocation(world, pos);
+    public void setWorld(World world) {
+        super.setWorld(world);
         this.sealCheckTime = SEAL_CHECK_TIME;
-        this.type = CelestialBodyType.getByDimType(world.getRegistryKey()).orElse(null);
+        CelestialBody<CelestialBodyConfig, ? extends Landable<CelestialBodyConfig>> body = RegistryUtil.getCelestialBodyByDimension(world).orElse(null);
+        this.oxygenWorld = body == null || body.type().atmosphere(body.config()).breathable();
     }
 
     @Override
@@ -112,13 +114,13 @@ public class OxygenSealerBlockEntity extends MachineBlockEntity implements Ticka
     public void updateComponents() {
         super.updateComponents();
         this.attemptChargeFromStack(BATTERY_SLOT);
-        if (!world.isClient && this.getStatus().getType().isActive()) this.getFluidInv().extractFluid(OXYGEN_TANK, Constant.Filter.LOX_ONLY, null, FluidAmount.of1620(set.size()), Simulation.ACTION);
+        if (!world.isClient && this.getStatus().getType().isActive()) this.fluidInv().extractFluid(OXYGEN_TANK, Constant.Filter.LOX_ONLY, null, FluidAmount.of1620(set.size()), Simulation.ACTION);
     }
 
     @Override
     public @NotNull MachineStatus updateStatus() {
         if (!this.hasEnergyToWork()) return Status.NOT_ENOUGH_ENERGY;
-        if (this.getFluidInv().getInvFluid(OXYGEN_TANK).isEmpty()) return Status.NOT_ENOUGH_OXYGEN;
+        if (this.fluidInv().getInvFluid(OXYGEN_TANK).isEmpty()) return Status.NOT_ENOUGH_OXYGEN;
         return Status.SEALED;
     }
 
@@ -131,10 +133,7 @@ public class OxygenSealerBlockEntity extends MachineBlockEntity implements Ticka
             if (sealCheckTime == 0) {
                 sealCheckTime = SEAL_CHECK_TIME;
                 BlockPos pos = this.getPos();
-                if (this.type == null
-                        || this.type.getAtmosphere().getComposition().containsKey(AtmosphericGas.OXYGEN)
-                        || (set.isEmpty()
-                        && ((WorldOxygenAccessor) world).isBreathable(pos.up()))) {
+                if (this.oxygenWorld || (set.isEmpty() && ((WorldOxygenAccessor) world).isBreathable(pos.up()))) {
                     this.setStatus(Status.ALREADY_SEALED);
                     return;
                 }
@@ -196,7 +195,7 @@ public class OxygenSealerBlockEntity extends MachineBlockEntity implements Ticka
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        if (this.getSecurity().hasAccess(player)) return GalacticraftScreenHandlerType.create(GalacticraftScreenHandlerType.OXYGEN_SEALER_HANDLER, syncId, inv, this);
+        if (this.security().hasAccess(player)) return GalacticraftScreenHandlerType.create(GalacticraftScreenHandlerType.OXYGEN_SEALER_HANDLER, syncId, inv, this);
         return null;
     }
 

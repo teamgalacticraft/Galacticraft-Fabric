@@ -23,7 +23,7 @@
 package dev.galacticraft.mod.block.environment;
 
 import dev.galacticraft.mod.block.GalacticraftBlock;
-import dev.galacticraft.mod.item.GalacticraftItems;
+import dev.galacticraft.mod.item.GalacticraftItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -45,6 +45,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -67,7 +68,7 @@ public class MoonBerryBushBlock extends PlantBlock {
 
     @Environment(EnvType.CLIENT)
     public ItemStack getPickStack(BlockView view, BlockPos pos, BlockState state) {
-        return new ItemStack(GalacticraftItems.MOON_BERRIES);
+        return new ItemStack(GalacticraftItem.MOON_BERRIES);
     }
 
     public VoxelShape getOutlineShape(BlockState blockState, BlockView blockView, BlockPos blockPos, ShapeContext context) {
@@ -99,8 +100,8 @@ public class MoonBerryBushBlock extends PlantBlock {
 
         if (mature) {
             int amount = 1 + world.random.nextInt(3);
-            dropStack(world, blockPos, new ItemStack(GalacticraftItems.MOON_BERRIES, amount));
-            world.playSound(null, blockPos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
+            dropStack(world, blockPos, new ItemStack(GalacticraftItem.MOON_BERRIES, amount));
+            world.playSound(null, blockPos, SoundEvents.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
             world.setBlockState(blockPos, blockState.with(AGE, 1), 2);
             return ActionResult.SUCCESS;
         } else {
@@ -129,7 +130,7 @@ public class MoonBerryBushBlock extends PlantBlock {
             int times = random.nextInt(4);
 
             for (int i = 0; i < times; i++) {
-                world.addParticle(new DustParticleEffect(0.5f, 0.5f, 1.0f, 0.6f), x, y, z, 0.0D, 0.0D, 0.0D);
+                world.addParticle(new DustParticleEffect(new Vec3f(0.5f, 0.5f, 1.0f), 0.6f), x, y, z, 0.0D, 0.0D, 0.0D);
             }
         }
     }

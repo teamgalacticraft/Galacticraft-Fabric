@@ -2,7 +2,7 @@
   "required": true,
   "package": "dev.galacticraft.mod.mixin",
   "plugin": "dev.galacticraft.mod.GalacticraftMixinPlugin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
     "BaseFluidMixin",
     "ChunkHolderMixin",
@@ -30,15 +30,14 @@
     "client.AbstractClientPlayerEntityMixin",
     "client.AlphaWarningTitleScreenMixin",
     "client.ClientChunkSectionMixin",
-    "client.ClientPlayerEntityMixin",
     "client.HandledScreenAccessor",
     "client.InGameHudMixin",
     "client.MinecraftClientMixin",
-    "client.OtherClientPlayerEntityMixin",
     "client.PauseMenuScreenMixin",
     "client.PlayerInventoryScreenMixin",
     "client.SoundSystemMixin",
-    "client.WorldRendererMixin"
+    "client.WorldRendererMixin",
+    "client.WorldRendererOverworldMixin"
   ],
   "minVersion": "0.8.0",
   "injectors": {

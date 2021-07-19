@@ -23,7 +23,7 @@
 package dev.galacticraft.mod.fluid;
 
 import dev.galacticraft.mod.block.GalacticraftBlock;
-import dev.galacticraft.mod.item.GalacticraftItems;
+import dev.galacticraft.mod.item.GalacticraftItem;
 import dev.galacticraft.mod.particle.GalacticraftParticle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -67,7 +67,7 @@ public class FuelFluid extends FlowableFluid {
 
     @Override
     public Item getBucketItem() {
-        return GalacticraftItems.FUEL_BUCKET;
+        return GalacticraftItem.FUEL_BUCKET;
     }
 
     @Environment(EnvType.CLIENT)
@@ -103,9 +103,9 @@ public class FuelFluid extends FlowableFluid {
     }
 
     @Override
-    public void beforeBreakingBlock(WorldAccess iWorld, BlockPos blockPos, BlockState blockState) {
-        BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? iWorld.getBlockEntity(blockPos) : null;
-        Block.dropStacks(blockState, iWorld, blockPos, blockEntity);
+    public void beforeBreakingBlock(WorldAccess world, BlockPos pos, BlockState state) {
+        BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+        Block.dropStacks(state, world, pos, blockEntity);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class FuelFluid extends FlowableFluid {
 
     @Override
     public BlockState toBlockState(FluidState fluidState) {
-        return GalacticraftBlock.FUEL.getDefaultState().with(FluidBlock.LEVEL, method_15741(fluidState));
+        return GalacticraftBlock.FUEL.getDefaultState().with(FluidBlock.LEVEL, getBlockStateLevel(fluidState));
     }
 
     @Override

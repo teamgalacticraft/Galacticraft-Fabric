@@ -33,7 +33,11 @@ accessible      field    net/minecraft/world/gen/chunk/NoiseChunkGenerator      
 accessible      field    net/minecraft/screen/slot/Slot                                       index              I
 accessible      field    net/minecraft/client/sound/SoundManager                              soundSystem        Lnet/minecraft/client/sound/SoundSystem;
 extendable      class    net/minecraft/world/gen/chunk/NoiseChunkGenerator
+accessible      class    net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
 
 accessible      method  net/minecraft/item/MusicDiscItem                                      <init>            (ILnet/minecraft/sound/SoundEvent;Lnet/minecraft/item/Item$Settings;)V
 accessible      method  net/minecraft/world/gen/chunk/NoiseChunkGenerator                     sampleNoiseColumn ([DII)V
 extendable      method  net/minecraft/world/gen/chunk/NoiseChunkGenerator                     sampleNoiseColumn ([DII)V
+accessible      method  net/minecraft/client/render/entity/model/AnimalModel                  getHeadParts      ()Ljava/lang/Iterable;
+accessible      method  net/minecraft/client/render/entity/model/AnimalModel                  getBodyParts      ()Ljava/lang/Iterable;
+accessible      method  net/minecraft/world/gen/chunk/ChunkGeneratorSettings                  <init>            (Lnet/minecraft/world/gen/chunk/StructuresConfig;Lnet/minecraft/world/gen/chunk/GenerationShapeConfig;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;IIIIZZZZZZ)V

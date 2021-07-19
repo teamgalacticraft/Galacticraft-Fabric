@@ -22,9 +22,6 @@
 
 package dev.galacticraft.mod.client.network;
 
-import alexiil.mc.lib.attributes.Simulation;
-import alexiil.mc.lib.attributes.item.impl.FullFixedItemInv;
-import com.hrznstudio.galacticraft.api.internal.data.ClientWorldTeamsGetter;
 import com.mojang.authlib.GameProfile;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.accessor.ChunkOxygenAccessor;
@@ -40,7 +37,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -60,16 +57,16 @@ public class GalacticraftClientPacketReceiver {
         ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "security_update"), (client, handler, buf, responseSender) -> { //todo(marcus): 1.17?
             BlockPos pos = buf.readBlockPos();
             SecurityInfo.Accessibility accessibility = SecurityInfo.Accessibility.values()[buf.readByte()];
-            GameProfile profile = NbtHelper.toGameProfile(Objects.requireNonNull(buf.readCompoundTag()));
+            GameProfile profile = NbtHelper.toGameProfile(Objects.requireNonNull(buf.readNbt()));
 
             client.execute(() -> {
                 assert client.world != null;
                 BlockEntity entity = client.world.getBlockEntity(pos);
-                if (entity instanceof MachineBlockEntity) {
+                if (entity instanceof MachineBlockEntity machine) {
                     assert profile != null;
                     assert accessibility != null;
-                    ((MachineBlockEntity) entity).getConfiguration().getSecurity().setOwner(((ClientWorldTeamsGetter) client.world).getSpaceRaceTeams(), profile);
-                    ((MachineBlockEntity) entity).getConfiguration().getSecurity().setAccessibility(accessibility);
+                    machine.getConfiguration().getSecurity().setOwner(/*((ClientWorldTeamsGetter) client.world).getSpaceRaceTeams(), */profile); //todo teams
+                    machine.getConfiguration().getSecurity().setAccessibility(accessibility);
 
                 }
             });
@@ -95,11 +92,11 @@ public class GalacticraftClientPacketReceiver {
                 int id = buffer.readVarInt();
                 UUID uuid = buffer.readUuid();
                 Entity entity = Registry.ENTITY_TYPE.get(buffer.readVarInt()).create(MinecraftClient.getInstance().world);
-                entity.setEntityId(id);
+                entity.setId(id);
                 entity.setUuid(uuid);
                 entity.setPos(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-                entity.yaw = (float) (buffer.readByte() * 360) / 256.0F;
-                entity.pitch = (float) (buffer.readByte() * 360) / 256.0F;
+                entity.setYaw((float) (buffer.readByte() * 360) / 256.0F);
+                entity.setPitch((float) (buffer.readByte() * 360) / 256.0F);
                 entity.setVelocity(buffer.readShort(), buffer.readShort(), buffer.readShort());
                 MinecraftClient.getInstance().world.addEntity(id, entity);
             });
@@ -111,34 +108,34 @@ public class GalacticraftClientPacketReceiver {
                 BlockPos pos = buffer.readBlockPos();
                 if (client.world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)) {
                     BlockEntity entity = client.world.getBlockEntity(pos);
-                    if (entity instanceof BubbleDistributorBlockEntity) {
-                        ((BubbleDistributorBlockEntity) entity).setSize(buffer.readDouble());
+                    if (entity instanceof BubbleDistributorBlockEntity machine) {
+                        machine.setSize(buffer.readDouble());
                     }
                 }
             });
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "oxygen_update"), (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
-            byte b = packetByteBuf.readByte();
-            ChunkOxygenAccessor accessor = ((ChunkOxygenAccessor) clientPlayNetworkHandler.getWorld().getChunk(packetByteBuf.readInt(), packetByteBuf.readInt()));
-            accessor.readOxygenUpdate(b, packetByteBuf);
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "oxygen_update"), (client, handler, buf, responseSender) -> {
+            byte b = buf.readByte();
+            ChunkOxygenAccessor accessor = ((ChunkOxygenAccessor) handler.getWorld().getChunk(buf.readInt(), buf.readInt()));
+            accessor.readOxygenUpdate(b, buf);
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "open_screen"), (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "open_screen"), (client, handler, buf, responseSender) -> {
 
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "gear_inv_sync"), (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
-            int entity = packetByteBuf.readInt();
-            int index = packetByteBuf.readByte();
-            ItemStack stack = packetByteBuf.readItemStack();
-            minecraftClient.execute(() -> ((GearInventoryProvider) minecraftClient.world.getEntityById(entity)).getGearInv().forceSetInvStack(index, stack));
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "gear_inv_sync"), (client, handler, buf, responseSender) -> {
+            int entity = buf.readInt();
+            int index = buf.readByte();
+            ItemStack stack = buf.readItemStack();
+            client.execute(() -> ((GearInventoryProvider) client.world.getEntityById(entity)).getGearInv().forceSetInvStack(index, stack));
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "gear_inv_sync_full"), (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
-            int entity = packetByteBuf.readInt();
-            CompoundTag tag = packetByteBuf.readCompoundTag();
-            minecraftClient.execute(() -> ((GearInventoryProvider) minecraftClient.world.getEntityById(entity)).readGearFromNbt(tag));
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier(Constant.MOD_ID, "gear_inv_sync_full"), (client, handler, buf, responseSender) -> {
+            int entity = buf.readInt();
+            NbtCompound tag = buf.readNbt();
+            client.execute(() -> ((GearInventoryProvider) client.world.getEntityById(entity)).readGearFromNbt(tag));
         });
     }
 }

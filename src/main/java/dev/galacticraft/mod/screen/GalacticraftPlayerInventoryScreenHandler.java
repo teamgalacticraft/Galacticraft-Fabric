@@ -27,7 +27,7 @@ import alexiil.mc.lib.attributes.item.compat.InventoryFixedWrapper;
 import com.mojang.datafixers.util.Pair;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.accessor.GearInventoryProvider;
-import dev.galacticraft.mod.item.GalacticraftItems;
+import dev.galacticraft.mod.item.GalacticraftItem;
 import dev.galacticraft.mod.item.ThermalArmorItem;
 import dev.galacticraft.mod.screen.slot.ItemSpecificSlot;
 import dev.galacticraft.mod.util.OxygenTankUtil;
@@ -58,7 +58,7 @@ public class GalacticraftPlayerInventoryScreenHandler extends ScreenHandler {
 
     public final FixedItemInv inventory;
 
-    private final PlayerEntity player;
+    public final PlayerEntity player;
 
     public GalacticraftPlayerInventoryScreenHandler(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         super(GalacticraftScreenHandlerType.PLAYER_INV_GC_HANDLER, syncId);
@@ -98,7 +98,7 @@ public class GalacticraftPlayerInventoryScreenHandler extends ScreenHandler {
             });
         }
 
-        this.addSlot(new ItemSpecificSlot(inventory, 4, 80, 8, GalacticraftItems.OXYGEN_MASK) {
+        this.addSlot(new ItemSpecificSlot(inventory, 4, 80, 8, GalacticraftItem.OXYGEN_MASK) {
             @Override
             public Pair<Identifier, Identifier> getBackgroundSprite() {
                 return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(Constant.MOD_ID, Constant.SlotSprite.OXYGEN_MASK));
@@ -110,7 +110,7 @@ public class GalacticraftPlayerInventoryScreenHandler extends ScreenHandler {
             }
         });
 
-        this.addSlot(new ItemSpecificSlot(inventory, 5, 80, 8 + 18, GalacticraftItems.OXYGEN_GEAR) {
+        this.addSlot(new ItemSpecificSlot(inventory, 5, 80, 8 + 18, GalacticraftItem.OXYGEN_GEAR) {
             @Override
             public Pair<Identifier, Identifier> getBackgroundSprite() {
                 return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(Constant.MOD_ID, Constant.SlotSprite.OXYGEN_GEAR));
@@ -211,7 +211,7 @@ public class GalacticraftPlayerInventoryScreenHandler extends ScreenHandler {
                 }
             }
 
-            slotFrom.onStackChanged(stackFrom, stack);
+            slotFrom.onQuickTransfer(stackFrom, stack);
 
             if (stackFrom.isEmpty()) {
                 slotFrom.setStack(ItemStack.EMPTY);
@@ -223,9 +223,9 @@ public class GalacticraftPlayerInventoryScreenHandler extends ScreenHandler {
                 return ItemStack.EMPTY;
             }
 
-            ItemStack itemStack3 = slotFrom.onTakeItem(player, stackFrom);
+            slotFrom.onTakeItem(player, stackFrom);
             if (index == 0) {
-                player.dropItem(itemStack3, false);
+                player.dropItem(stackFrom, false);
             }
         }
 
